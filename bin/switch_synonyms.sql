@@ -15,4 +15,5 @@ BEGIN
   EXECUTE IMMEDIATE 'CREATE OR REPLACE SYNONYM geoip_cityisporg FOR '||tempor;
   EXECUTE IMMEDIATE 'CREATE OR REPLACE SYNONYM geoip_cityisporg_for_load FOR '||active;
 END;
+/
 EXIT;
