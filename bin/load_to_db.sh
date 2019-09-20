@@ -20,9 +20,9 @@ echo "Loading to DB ..."
 sleep 1
 date '+Loader ended      : %Y.%m.%d %T'
 echo "##################################"
-#echo "Analize tables ..."
-#(sqlplus -S -L ${DBUser}/${DBPass}@//${DBHost}/${DBServiceType} @${dirToCTL}/analize_CRE_BALANCE.sql)
-#date '+Analized          : %Y.%m.%d %T'
+echo "Switch Synonyms ..."
+(sqlplus -S -L $DBUser/$DBPass@$DBServiceType @$main_GeoIP_DIR/bin/switch_synonyms.sql)
+date '+Switched          : %Y.%m.%d %T'
 #echo "Removing dump files ..."
 #echo "Removing Dump     :       ${dirToProcessedDump}/CreBalance_${dumpDate}.csv"
 #rm -f ${dirToProcessedDump}/CreBalance_${dumpDate}.csv
