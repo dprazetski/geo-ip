@@ -1,5 +1,5 @@
-// to build: gcc -g -o get_locs get_locs.c -lnsl
-// to build: gcc -g -o get_locs get_locs.c -lsocket -lnsl
+// to build: gcc -g -o merge_loc_and_org merge_loc_and_org.c -lnsl
+// to build: gcc -g -o merge_loc_and_org merge_loc_and_org.c -lsocket -lnsl
 #include <stdio.h>
 #include <string.h>
 #include <stddef.h>
@@ -105,9 +105,9 @@ main(int argc, char **argv)
       printf("too many locations (%d) > %d.  Ignoring ...\n", ctr, MAX_LOCS);
       continue;
     }
-    if ((idx & 50000) == 0) {
-      printf(".");
-    }
+//    if ((idx & 50000) == 0) {
+//      printf(".");
+//    }
     //printf("idx=%ld\n", idx);
     strcpy(locs[idx].locid, locid);
     t2 = (char *) strtok (NULL, delimiters);

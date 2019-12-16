@@ -1,0 +1,44 @@
+#!/bin/sh
+
+MAIN_GEOIP_DIR=/u/debit/geo_ip
+MAXMIND_DIR=$MAIN_GEOIP_DIR/maxmind
+SOURCE_DIR=$MAIN_GEOIP_DIR/source
+SQLLDR_DIR=$MAIN_GEOIP_DIR/oracle_loader
+
+echo "Creating directories"
+mkdir -p $MAXMIND_DIR $SOURCE_DIR $SQLLDR_DIR
+
+echo "Loading latest ZIP from MaxMind"
+#previous license_key=uRw8mrYFzqoD
+/usr/bin/wget -t 45 -O $MAXMIND_DIR/latest.GeoIP-144.gz -o $MAXMIND_DIR/MaxMind_wget.log 'http://download.MaxMind.com/app/download_new?edition_id=144&suffix=zip&license_key=jbMjl0u3DO3F'
+
+#cd $SQLLDR_DIR
+rm -rf $SOURCE_DIR/G* $SOURCE_DIR/loc*
+#cd ../
+
+#mv $MAXMIND_DIR/latest.GeoIP-144.gz $SOURCE_DIR/GeoIP-144.gz
+echo "UnZip downloaded ZIP to $SOURCE_DIR"
+#cd $SOURCE_DIR
+unzip $MAXMIND_DIR/latest.GeoIP-144.gz -d $SOURCE_DIR/
+#cd ../
+
+LOCATION_CSV=`ls $SOURCE_DIR/GeoIP-144_*/GeoIPCity-144-Location.csv`
+ORGANIZATION_CSV=`ls $SOURCE_DIR/GeoIP-144_*/GeoIPCityISPOrg-144.csv`
+
+echo "Now doing: ./check_location.sh $SOURCE_DIR $LOCATION_CSV"
+$MAIN_GEOIP_DIR/bin/check_location.sh $SOURCE_DIR $LOCATION_CSV
+
+echo "Now doing: ./check_organization.sh $MAIN_GEOIP_DIR $ORGANIZATION_CSV"
+$MAIN_GEOIP_DIR/bin/check_organization.sh $MAIN_GEOIP_DIR $ORGANIZATION_CSV
+
+echo "Now doing: ./merge_loc_and_org $SOURCE_DIR/location.out $MAIN_GEOIP_DIR/organization.out $SQLLDR_DIR/ipdata.out"
+$MAIN_GEOIP_DIR/bin/merge_loc_and_org $SOURCE_DIR/location.out $MAIN_GEOIP_DIR/organization.out $SQLLDR_DIR/ipdata.out
+
+rm -f $MAIN_GEOIP_DIR/organization.out
+
+#mv $MAIN_GEOIP_DIR/ipdata.out $SQLLDR_DIR
+
+echo " "
+echo "$SQLLDR_DIR/ipdata.out contains the data to be loaded into RETAIL DB"
+echo " "
+
