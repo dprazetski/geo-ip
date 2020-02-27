@@ -34,4 +34,3 @@ cat $LOCATION_CSV | grep -v Copyright | grep -vi postalCode \
 | sed -e 's/||/|NULL|/g' \
 | sed -e 's/||/|NULL|/g' \
 | sed -e 's/||/|NULL|/g' > $LOCATION_OUT
-
